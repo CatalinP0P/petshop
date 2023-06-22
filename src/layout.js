@@ -1,6 +1,7 @@
 import React from "react";
 
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function Layout({ children }) {
   return (
@@ -9,7 +10,9 @@ export default function Layout({ children }) {
         <Header />
       </header>
       <main className="flex-1 overflow-x-hidden">{children}</main>
-      <footer>Footer</footer>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

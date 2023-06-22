@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.productCard div {
+  display: none;
+}
+
+.productCard:hover div {
+  display: flex;
+}

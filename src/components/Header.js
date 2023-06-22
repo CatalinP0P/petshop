@@ -54,7 +54,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="w-full bg-blue-500 py-4 md:flex hidden uppercase text-gray-50">
+      <div className="w-full bg-primary py-4 md:flex hidden uppercase text-gray-50">
         <div className="max-w-[1100px] font-extrabold flex flex-row gap-8 mx-auto w-full">
           {categories.map((cat) => {
             return <a key={cat}>{cat}</a>;
