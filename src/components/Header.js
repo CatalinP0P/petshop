@@ -42,24 +42,19 @@ export default function Header() {
                     className="px-4 py-2 rounded-md border-2 border-orange-600 w-full order-10 md:order-2"
                 />
                 <div className="flex flex-row order-3 gap-8 md:gap-16">
-                    <div className="flex flex-row gap-4 order-3">
+                    <div
+                        className="flex flex-row gap-4 order-3"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            closeAllTabs()
+                            setMyAccountTab(!myAccountTab)
+                        }}
+                    >
                         <img
                             src={User}
                             className="w-[24px] h-[24px] md:w-[40px] md:h-[40px]"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                closeAllTabs()
-                                setMyAccountTab(!myAccountTab)
-                            }}
                         />
-                        <div
-                            className="hidden md:flex flex-col justify-between relative"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                closeAllTabs()
-                                setMyAccountTab(!myAccountTab)
-                            }}
-                        >
+                        <div className="hidden md:flex flex-col justify-between relative">
                             <label className="text-gray-400">Welcome</label>
                             <label className="whitespace-nowrap uppercase font-extrabold text-orange-600">
                                 My account
@@ -89,7 +84,10 @@ export default function Header() {
                                         </label>
                                     </div>
                                 ) : (
-                                    <LoginForm className={'px-8 py-4'} />
+                                    <LoginForm
+                                        closeTabs={closeAllTabs}
+                                        className={'px-8 py-4'}
+                                    />
                                 )}
                             </div>
                         </div>

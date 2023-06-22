@@ -3,7 +3,7 @@ import firebase from '../lib/firebase'
 import { useAuth } from '../context/authContext'
 import { Link, useNavigate } from 'react-router-dom'
 
-export default function LoginForm({ className }) {
+export default function LoginForm({ className, closeTabs }) {
     const auth = useAuth()
 
     const [email, setEmail] = useState('')
@@ -65,6 +65,7 @@ export default function LoginForm({ className }) {
             </p>
             <Link
                 to={'/register'}
+                onClick={closeTabs}
                 className="text-orange-600 font-semibold text-center w-full underline cursor-pointer"
             >
                 Create Account
