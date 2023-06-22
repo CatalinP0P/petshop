@@ -7,9 +7,11 @@ import {
     Router,
 } from 'react-router-dom'
 import Home from './pages/Home/Home'
+import Search from './pages/Search/Search'
 import firebase from './lib/firebase'
 import { useDatabaseContext } from './context/databaseContext'
 import Register from './pages/Register/Register'
+import NewProduct from './pages/NewProduct/NewProduct'
 
 export default function App() {
     const db = useDatabaseContext()
@@ -23,16 +25,18 @@ export default function App() {
 
     return (
         <>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route
-                        path="*"
-                        element={
-                            <h1 className="text-6xl text-center">ERROR 404</h1>
-                        }
-                    />
-                </Routes>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
+                <Route path='/search' element={<Search />} />
+                <Route path="/new/product" element={<NewProduct />} />
+                <Route
+                    path="*"
+                    element={
+                        <h1 className="text-6xl text-center">ERROR 404</h1>
+                    }
+                />
+            </Routes>
         </>
     )
 }

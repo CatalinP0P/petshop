@@ -1,10 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '../../components/Container'
 import PrimaryButton from '../../components/PrimaryButton'
+import firebase from '../../lib/firebase'
+import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
+    const navigate = useNavigate()
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [rePassword, setRePassword] = useState('')
+    const [name, setName] = useState('')
+
+    const [error, setError] = useState('')
+
+    const createAccount = async () => {
+        if (rePassword != password) return setError('Passwords do not match')
+
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((user) => {
+                firebase.auth().currentUser.updateProfile({
+                    displayName: name,
+                })
+                navigate('/')
+            })
+            .catch((err) => {
+                console.log(err.message)
+                setError(err.message.split('.')[0])
+            })
+    }
+
     return (
-        <Container>
+        <Container className={'px-4 lg:px-0'}>
             <div className="flex flex-col lg:flex-row gap-4 py-6 text-gray-800">
                 <div className="w-fit h-fit flex flex-col p-4 gap-2 uppercase text-xs border border-gray-400 rounded-md">
                     <label className="text-lg font-extrabold text-gray-700">
@@ -36,26 +65,39 @@ export default function Register() {
                         <label className="text-gray-400">
                             First and Last Name
                         </label>
-                        <input className={inputStyle} />
+                        <input
+                            className={inputStyle}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                     </div>
                     <div className="flex flex-col gap-1 w-full">
                         <label className="text-gray-400">Email</label>
-                        <input className={inputStyle} />
-                    </div>
-
-                    <div className="flex flex-col gap-1 w-full">
-                        <label className="text-gray-400">Phone</label>
-                        <input className={inputStyle} />
+                        <input
+                            className={inputStyle}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
 
                     <div className="flex flex-col gap-1 w-full">
                         <label className="text-gray-400">Password</label>
-                        <input type="password" className={inputStyle} />
+                        <input
+                            type="password"
+                            className={inputStyle}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
                     </div>
 
                     <div className="flex flex-col gap-1 w-full">
                         <label className="text-gray-400">Retype Password</label>
-                        <input type="password" className={inputStyle} />
+                        <input
+                            type="password"
+                            className={inputStyle}
+                            value={rePassword}
+                            onChange={(e) => setRePassword(e.target.value)}
+                        />
                     </div>
 
                     <label className="font-semibold text-2xl">
@@ -75,9 +117,10 @@ export default function Register() {
                         </p>
                     </div>
 
-                    <PrimaryButton className="mt-8">
+                    <PrimaryButton className="mt-8" onClick={createAccount}>
                         Create Account
                     </PrimaryButton>
+                    <p className="w-full text-red-400 text-md">{error}</p>
                 </div>
 
                 <div className="w-fit">

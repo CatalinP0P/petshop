@@ -13,14 +13,14 @@ import firebase from '../../lib/firebase.js'
 const BestSellers = [
     {
         id: 1,
-        image: hrana,
+        imageURL: hrana,
         title: 'N&D GRAIN FREE ADULT MINI MIEL, AFINE SI DOVLEAC, 2.5 KG',
         category: 'dogs',
         price: 29.33,
     },
     {
         id: 1,
-        image: hrana,
+        imageURL: hrana,
         title: 'N&D GRAIN FREE ADULT MINI MIEL, AFINE SI DOVLEAC, 2.5 KG',
         category: 'dogs',
         price: 29.33,
@@ -44,7 +44,10 @@ export default function Home() {
                 <label className="text-4xl font-bold uppercase">
                     Best Sellers
                 </label>
-                <ProductsContainer className={'pt-2'} products={BestSellers} />
+                <ProductsContainer
+                    className={'pt-2'}
+                    products={db.bestSellers}
+                />
             </Container>
 
             <Container className={'pt-16 px-2'}>

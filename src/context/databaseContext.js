@@ -1,5 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from 'react'
 import axios from 'axios'
+import CategoryCard from '../pages/Home/CategoryCard'
 
 const DatabaseContext = createContext(null)
 
@@ -24,10 +25,31 @@ export const DatabaseProvider = ({ children }) => {
         setHasToken(true)
     }
 
+    const postProduct = async (product) => {
+        const response = await req.post('/products', {
+            title: product.title,
+            price: product.price,
+            description: product.description,
+            imageURL: product.imageURL,
+            category: product.category,
+            description: product.description,
+        })
+
+        return response
+    }
+
     const fetchProducts = () => {
         req.get('/products')
             .then((response) => {
                 setProducts(response.data)
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+
+        req.get('/products/bestSelling')
+            .then((response) => {
+                setBestSellers(response.data)
             })
             .catch((err) => {
                 console.error(err)
@@ -53,6 +75,7 @@ export const DatabaseProvider = ({ children }) => {
                 bestSellers: bestSellers,
                 setIdToken: setIdToken,
                 fetchProducts: fetchProducts,
+                postProduct: postProduct,
             }}
         >
             {children}

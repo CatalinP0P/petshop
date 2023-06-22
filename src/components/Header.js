@@ -68,7 +68,12 @@ export default function Header() {
                             >
                                 {auth.currentUser ? (
                                     <div className="flex flex-col w-full whitespace-nowrap">
-                                        <label className="px-8 py-2">
+                                        <label
+                                            className="px-8 py-2"
+                                            onClick={() =>
+                                                console.log(auth.currentUser)
+                                            }
+                                        >
                                             Hi,
                                             <span className="font-bold py-4">
                                                 {` ${auth.currentUser.email}`}
