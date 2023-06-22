@@ -27,7 +27,6 @@ export const DatabaseProvider = ({ children }) => {
     const fetchProducts = () => {
         req.get('/products')
             .then((response) => {
-                console.log(response.data)
                 setProducts(response.data)
             })
             .catch((err) => {

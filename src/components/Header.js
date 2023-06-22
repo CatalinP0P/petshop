@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
+import LoginForm from '../components/LoginForm'
+import { useAuth } from '../context/authContext'
 
 import Logo from '../components/Logo'
 import Cart from '../assets/cart.svg'
 import User from '../assets/user.svg'
+import firebase from '../lib/firebase'
 
 const categories = ['dogs', 'cats', 'fishes', 'birds', 'rodent']
 
 export default function Header() {
+    const auth = useAuth()
     const [myAccountTab, setMyAccountTab] = useState(false)
     const [myCartTab, setMyCartTab] = useState(false)
 
@@ -62,39 +66,31 @@ export default function Header() {
                             </label>
                             <div
                                 className={
-                                    'absolute right-0 w-fit px-8 py-4 z-40 shadow-md bg-white top-[65px] flex-col gap-4 ' +
+                                    'absolute right-0 w-fit z-40 shadow-md bg-white top-[65px] flex-col gap-4 ' +
                                     (myAccountTab ? ' flex' : ' hidden')
                                 }
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <div className="flex flex-col gap-1 w-full">
-                                    <label className="text-sm me-1 text-gray-500 font-medium">
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        className="px-2 py-1 border border-orange-600 rounded-md outline-none"
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-1 w-full">
-                                    <label className="text-sm me-1 text-gray-500 font-medium">
-                                        Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        className="px-2 py-1 border border-orange-600 rounded-md outline-none"
-                                    />
-                                </div>
-
-                                <button className="bg-orange-600 px-2 py-1 mt-2 text-md text-white font-semibold hover:text-gray-200 transition-all uppercase rounded-md shadow-md">
-                                    Login
-                                </button>
-                                <label
-                                    onClick={() => {}}
-                                    className="text-orange-600 font-semibold text-center w-full underline cursor-pointer"
-                                >
-                                    Create Account
-                                </label>
+                                {auth.currentUser ? (
+                                    <div className="flex flex-col w-full whitespace-nowrap">
+                                        <label className="px-8 py-2">
+                                            Hi,
+                                            <span className="font-bold py-4">
+                                                {` ${auth.currentUser.email}`}
+                                            </span>
+                                        </label>
+                                        <label
+                                            className="hover:bg-gray-100 px-8 py-2 cursor-pointer"
+                                            onClick={() =>
+                                                firebase.auth().signOut()
+                                            }
+                                        >
+                                            Logout
+                                        </label>
+                                    </div>
+                                ) : (
+                                    <LoginForm className={'px-8 py-4'} />
+                                )}
                             </div>
                         </div>
                     </div>

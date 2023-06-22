@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import SlideShow from './SlideShow'
 import Info from './Info'
 import MobileCategories from './MobileCategories'
+import { useAuth } from '../../context/authContext'
 import hrana from '../../assets/hrana.png'
 import ProductsContainer from '../../components/ProductsContainer'
 import Container from '../../components/Container'
 import About from './About'
 import { useDatabaseContext } from '../../context/databaseContext'
+import firebase from '../../lib/firebase.js'
 
 const BestSellers = [
     {
@@ -24,7 +26,9 @@ const BestSellers = [
         price: 29.33,
     },
 ]
+
 export default function Home() {
+    const auth = useAuth()
     const db = useDatabaseContext()
 
     useEffect(() => {

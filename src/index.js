@@ -4,12 +4,18 @@ import './index.css'
 import App from './App'
 import Layout from './layout'
 import { DatabaseProvider } from './context/databaseContext'
+import { AuthProvider } from './context/authContext'
+import { BrowserRouter, Router } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <DatabaseProvider>
-        <Layout>
-            <App />
-        </Layout>
+        <AuthProvider>
+            <BrowserRouter>
+                <Layout>
+                    <App />
+                </Layout>
+            </BrowserRouter>
+        </AuthProvider>
     </DatabaseProvider>
 )
