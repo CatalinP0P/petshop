@@ -1,16 +1,27 @@
-import React from "react";
-import { Route, BrowserRouter, Routes } from "react-router-dom";
-
-import Home from "./pages/Home/Home";
+import React, { useEffect } from 'react'
+import { Route, BrowserRouter, Routes, parsePath } from 'react-router-dom'
+import Home from './pages/Home/Home'
+import firebase from './lib/firebase'
+import { useDatabaseContext } from './context/databaseContext'
 
 export default function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+    const db = useDatabaseContext()
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+        console.log('called')
+        if (user) {
+            const token = await user.getIdToken()
+            db.setIdToken(token)
+        }
+    })
+
+    return (
+        <>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                </Routes>
+            </BrowserRouter>
+        </>
+    )
 }
