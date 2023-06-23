@@ -13,6 +13,7 @@ export default function Search() {
     const [searchParams] = useSearchParams()
     const [filters, setFilters] = useState([])
     const [loadedFilters, setLoadedFilters] = useState(false)
+    const [productsLoaded, setProductsLoaded] = useState(false)
 
     const navigate = useNavigate()
 
@@ -88,8 +89,14 @@ export default function Search() {
 
         console.log(q, category)
 
-        const response = await db.searchProducts({ category: category, q: q, minPrice: minPrice, maxPrice: maxPrice })
+        const response = await db.searchProducts({
+            category: category,
+            q: q,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+        })
         setProducts(response)
+        setProductsLoaded(true)
     }
 
     useEffect(() => {
@@ -97,13 +104,45 @@ export default function Search() {
     }, [window.location.href])
 
     return (
-        <Container className={'py-6 flex flex-row px-2 xl:px-0 gap-4'}>
+        <Container
+            className={'py-6 flex flex-col md:flex-row px-2 xl:px-0 gap-4'}
+        >
             <DesktopFilters
                 filters={filters}
                 setFilters={setFilters}
                 setFilter={setFilter}
             />
-            <ProductsContainer className={'h-fit'} products={products} />
+            {productsLoaded ? (
+                <div className="flex flex-col gap-2 w-full">
+                    {products.length > 0 ? (
+                        <>
+                            <label className="text-4xl font-bold uppercase w-full whitespace-nowrap">
+                                Products found{' '}
+                                {filters.find((m) => m.key == 'q') ? (
+                                    <label>
+                                        {'after : ' +
+                                            filters.find((m) => m.key == 'q')
+                                                .value}
+                                    </label>
+                                ) : null}
+                            </label>
+                        </>
+                    ) : (
+                        <label className="text-4xl font-bold uppercase w-full whitespace-nowrap">
+                            No products found
+                        </label>
+                    )}
+                    <div className="w-full h-[1px] bg-gray-400" />
+                    <ProductsContainer
+                        className={'mt-4 h-fit'}
+                        products={products}
+                    />
+                </div>
+            ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-4xl font-bold uppercase">
+                    Loading...
+                </div>
+            )}
         </Container>
     )
 }
