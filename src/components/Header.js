@@ -6,17 +6,26 @@ import Logo from '../components/Logo'
 import Cart from '../assets/cart.svg'
 import User from '../assets/user.svg'
 import firebase from '../lib/firebase'
+import { useNavigate } from 'react-router-dom'
 
 const categories = ['dogs', 'cats', 'fishes', 'birds', 'rodent']
 
 export default function Header() {
     const auth = useAuth()
+    const navigate = useNavigate()
+
     const [myAccountTab, setMyAccountTab] = useState(false)
     const [myCartTab, setMyCartTab] = useState(false)
+    const [search, setSearch] = useState('')
 
     const closeAllTabs = () => {
         setMyAccountTab(false)
         setMyCartTab(false)
+    }
+
+    const searchProduct = () => {
+        navigate('/search?q=' + search)
+        window.location.reload();
     }
 
     return (
@@ -38,7 +47,14 @@ export default function Header() {
             <div className="max-w-[1100px] mx-auto flex flex-row items-center gap-8 justify-between py-4 flex-wrap md:flex-nowrap">
                 <Logo className={'mt-[-10px] order-1'} />
                 <input
+                    value={search}
                     placeholder="Search for a product"
+                    onChange={(e) => {
+                        setSearch(e.target.value)
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key == 'Enter') searchProduct()
+                    }}
                     className="px-4 py-2 rounded-md border-2 border-orange-600 w-full order-10 md:order-2"
                 />
                 <div className="flex flex-row order-3 gap-8 md:gap-16">
