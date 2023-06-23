@@ -7,17 +7,20 @@ import bird from '../../assets/kiwi-bird.svg'
 import rat from '../../assets/rat.svg'
 import CategoryCard from './CategoryCard'
 import spider from '../../assets/spider.svg'
+import { useNavigate } from 'react-router-dom'
 
 var categories = [
-    { text: 'dogs', image: dog },
-    { text: 'cats', image: cat },
-    { text: 'birds', image: bird },
-    { text: 'fishes', image: fish },
-    { text: 'rodents', image: rat },
-    { text: 'tarantulas', image: spider },
+    { text: 'dog', image: dog },
+    { text: 'cat', image: cat },
+    { text: 'bird', image: bird },
+    { text: 'fish', image: fish },
+    { text: 'rodent', image: rat },
+    { text: 'tarantula', image: spider },
 ]
 
 export default function MobileCategories({ className }) {
+    const navigate = useNavigate()
+
     return (
         <div
             className={
@@ -29,7 +32,14 @@ export default function MobileCategories({ className }) {
             {categories.map((cat) => {
                 return (
                     <div key={cat._id || Math.random() * 1000}>
-                        <CategoryCard text={cat.text} image={cat.image} />
+                        <CategoryCard
+                            text={cat.text}
+                            image={cat.image}
+                            onClick={() => {
+                                navigate('/search?category=' + cat.text)
+                                window.location.reload()
+                            }}
+                        />
                     </div>
                 )
             })}

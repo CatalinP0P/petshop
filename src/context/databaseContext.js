@@ -63,6 +63,11 @@ export const DatabaseProvider = ({ children }) => {
         })
     }
 
+    const searchProducts = async (filters) => {
+        const response = await req.post('/products/search', {filters: filters})
+        return response.data
+    }
+
     useEffect(() => {
         pingServer()
     }, [])
@@ -76,6 +81,7 @@ export const DatabaseProvider = ({ children }) => {
                 setIdToken: setIdToken,
                 fetchProducts: fetchProducts,
                 postProduct: postProduct,
+                searchProducts: searchProducts
             }}
         >
             {children}

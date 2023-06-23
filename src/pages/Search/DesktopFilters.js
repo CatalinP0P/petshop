@@ -63,8 +63,8 @@ export default function DesktopFilters({ filters, setFilters, setFilter }) {
         const minPrice = minPriceRef.current.value
         const maxPrice = maxPriceRef.current.value
 
-        setFilter('minPrice', minPrice)
-        setFilter('maxPrice', maxPrice)
+        if (minPrice) setFilter('minPrice', minPrice)
+        if (maxPrice) setFilter('maxPrice', maxPrice)
     }
 
     const handlePriceInput = async (e) => {
@@ -84,8 +84,8 @@ export default function DesktopFilters({ filters, setFilters, setFilter }) {
     }
 
     return (
-        <div className="w-fit flex flex-col gap-4">
-            <div className="flex flex-col gap-2 text-gray-800">
+        <div className="w-fit flex flex-row md:flex-col gap-4 justify-start items-start h-fit">
+            <div className="flex flex-col gap-2 text-gray-800 h-full">
                 <label className="text-xl uppercase font-bold">
                     Categories
                 </label>
@@ -98,7 +98,14 @@ export default function DesktopFilters({ filters, setFilters, setFilter }) {
                             <input
                                 onChange={handleInputChanged}
                                 type="checkbox"
-                                checked={category == cat.text ? true : false}
+                                checked={
+                                    category
+                                        ? category.toLowerCase() ==
+                                          cat.text.toLowerCase()
+                                            ? true
+                                            : false
+                                        : false
+                                }
                                 data-value={cat.text}
                                 data-filter="category"
                             />
@@ -109,8 +116,8 @@ export default function DesktopFilters({ filters, setFilters, setFilter }) {
             </div>
 
             <hr className="my-2" />
-            <div className="flex flex-col gap-2 text-gray-800">
-                <label className="text-xl uppercase font-bolds">Price</label>
+            <div className="flex flex-col gap-2 text-gray-800 h-full">
+                <label className="text-xl uppercase font-bold">Price</label>
                 {priceIntervals.map((price) => {
                     return (
                         <div

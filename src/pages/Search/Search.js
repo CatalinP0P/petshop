@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Container from '../../components/Container'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useFetcher, useNavigate, useSearchParams } from 'react-router-dom'
 import DesktopFilters from './DesktopFilters'
+import { useDatabaseContext } from '../../context/databaseContext'
+import ProductsContainer from '../../components/ProductsContainer'
 
 export default function Search() {
+    const [products, setProducts] = useState([])
+
+    const db = useDatabaseContext()
+
     const [searchParams] = useSearchParams()
     const [filters, setFilters] = useState([])
+    const [loadedFilters, setLoadedFilters] = useState(false)
 
     const navigate = useNavigate()
 
@@ -13,6 +20,8 @@ export default function Search() {
         searchParams.forEach((value, key) => {
             setFilters((old) => [...old, { key: key, value: value }])
         })
+        setLoadedFilters(true)
+        console.log('Loaded')
     }
 
     const setFilter = (key, value) => {
@@ -48,26 +57,53 @@ export default function Search() {
         filters.forEach((filter) => {
             searchParamsString += `&${filter.key}=${filter.value}`
         })
+
         navigate(searchParamsString)
     }, [filters])
+
+    const deconstructFilters = () => {
+        const q = filters.find((m) => m.key == 'q')
+            ? filters.find((m) => m.key == 'q').value
+            : null
+
+        const category = filters.find((m) => m.key == 'category')
+            ? filters.find((m) => m.key == 'category').value
+            : null
+
+        const minPrice = filters.find((m) => m.key == 'minPrice')
+            ? filters.find((m) => m.key == 'minPrice').value
+            : null
+
+        const maxPrice = filters.find((m) => m.key == 'maxPrice')
+            ? filters.find((m) => m.key == 'maxPrice').value
+            : null
+
+        return { q, category, minPrice, maxPrice }
+    }
+
+    const fetchProducts = async () => {
+        if (!loadedFilters) return
+
+        const { q, category, minPrice, maxPrice } = deconstructFilters()
+
+        console.log(q, category)
+
+        const response = await db.searchProducts({ category: category, q: q, minPrice: minPrice, maxPrice: maxPrice })
+        setProducts(response)
+    }
+
+    useEffect(() => {
+        fetchProducts()
+    }, [window.location.href])
+
     return (
-        <Container className={'py-6 flex flex-col'}>
+        <Container className={'py-6 flex flex-row px-2 xl:px-0 gap-4'}>
             <DesktopFilters
                 filters={filters}
                 setFilters={setFilters}
                 setFilter={setFilter}
             />
-            {filters.map((filter) => {
-                return (
-                    <div
-                        className="flex flex-row gap-4 justify-around w-full"
-                        key={Math.random() * 1000}
-                    >
-                        <label>Key: {filter.key}</label>
-                        <label>Value: {filter.value}</label>
-                    </div>
-                )
-            })}
+            <ProductsContainer className={'h-fit'} products={products} />
         </Container>
     )
 }

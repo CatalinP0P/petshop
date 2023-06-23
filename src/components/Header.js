@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import LoginForm from '../components/LoginForm'
 import { useAuth } from '../context/authContext'
+import { Link } from 'react-router-dom'
 
 import Logo from '../components/Logo'
 import Cart from '../assets/cart.svg'
@@ -8,7 +9,7 @@ import User from '../assets/user.svg'
 import firebase from '../lib/firebase'
 import { useNavigate } from 'react-router-dom'
 
-const categories = ['dogs', 'cats', 'fishes', 'birds', 'rodent']
+const categories = ['dog', 'cat', 'fish', 'bird', 'tarantula', 'rodent']
 
 export default function Header() {
     const auth = useAuth()
@@ -25,7 +26,7 @@ export default function Header() {
 
     const searchProduct = () => {
         navigate('/search?q=' + search)
-        window.location.reload();
+        window.location.reload()
     }
 
     return (
@@ -155,7 +156,18 @@ export default function Header() {
             <div className="w-full bg-primary py-4 md:flex hidden uppercase text-gray-50">
                 <div className="max-w-[1100px] font-extrabold flex flex-row gap-8 mx-auto w-full">
                     {categories.map((cat) => {
-                        return <a key={Math.random() * 1000}>{cat}</a>
+                        return (
+                            <a
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    navigate('/search?category=' + cat)
+                                    window.location.reload()
+                                }}
+                                key={Math.random() * 1000}
+                            >
+                                {cat}
+                            </a>
+                        )
                     })}
                     <a className="text-orange-600">offers</a>
                 </div>
