@@ -12,16 +12,19 @@ export const CartProvider = ({ children }) => {
     const auth = useAuth()
     const db = useDatabaseContext()
     const [cart, setCart] = useState([])
+    const [loaded, setLoaded] = useState(false)
 
     const clearCart = async () => {
         updateCart([])
     }
 
     const getCart = async () => {
+        console.log('Getting products')
         if (auth.currentUser) {
             const token = await auth.currentUser.getIdToken()
             db.setIdToken(token)
             const cart = await db.getCart()
+            console.log(cart.data.products)
             setCart(cart.data.products)
         } else {
             console.log(
@@ -32,24 +35,30 @@ export const CartProvider = ({ children }) => {
                 localStorage.setItem('cart', [])
                 setCart([])
             } else {
+                console.log(JSON.parse(localStorageCart))
                 setCart(JSON.parse(localStorageCart))
             }
+        }
+        if (!loaded) {
+            setLoaded(true)
+            console.log('Loaded')
         }
     }
 
     const updateCart = async (products) => {
-        console.log(products)
+        console.log('updating products')
         if (auth.currentUser) {
             db.updateCart(products)
         } else {
             localStorage.setItem('cart', JSON.stringify(products))
         }
 
-        getCart()
+        setTimeout(() => {
+            getCart()
+        }, 75)
     }
 
-    const addToCart = async (productId) => {
-        console.log('adding ' + productId)
+    const addToCart = (productId) => {
         updateCart([...cart, productId])
     }
 
@@ -57,9 +66,23 @@ export const CartProvider = ({ children }) => {
         getCart()
     }, [])
 
+    const removeFromCart = (productId) => {
+        const currentCart = cart
+        const index = currentCart.indexOf(productId)
+
+        currentCart.splice(index, 1)
+        updateCart(currentCart)
+    }
+
     return (
         <CartContext.Provider
-            value={{ cart: cart, addToCart: addToCart, clearCart: clearCart }}
+            value={{
+                cart: cart,
+                addToCart: addToCart,
+                clearCart: clearCart,
+                removeFromCart: removeFromCart,
+                loaded: loaded,
+            }}
         >
             {children}
         </CartContext.Provider>

@@ -84,8 +84,7 @@ export const DatabaseProvider = ({ children }) => {
 
     const updateCart = async (products) => {
         const response = await req.post('/cart', { products: products })
-        console.log(response)
-        return response
+        return response.data
     }
 
     useEffect(() => {
