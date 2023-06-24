@@ -12,6 +12,7 @@ import firebase from './lib/firebase'
 import { useDatabaseContext } from './context/databaseContext'
 import Register from './pages/Register/Register'
 import NewProduct from './pages/NewProduct/NewProduct'
+import Product from './pages/Product/Product'
 
 export default function App() {
     const db = useDatabaseContext()
@@ -28,7 +29,8 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
-                <Route path='/search' element={<Search />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/product/:id" element={<Product />} />
                 <Route path="/new/product" element={<NewProduct />} />
                 <Route
                     path="*"

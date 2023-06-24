@@ -1,14 +1,20 @@
 import React from 'react'
 import cart from '../assets/cart-white.svg'
+import { useNavigate } from 'react-router-dom'
 
 export default function ProductCard({ product, onClick }) {
+    const navigate = useNavigate()
+
     const addToCart = () => {
         console.log('Still working on it')
     }
     return (
         <div
             className="border-2 border-gray-100  rounded-md px-[24px] py-[32px] flex flex-col gap-4 h-full cursor-pointer hover:border-orange-600"
-            onClick={onClick}
+            onClick={() => {
+                navigate('/product/' + product._id)
+                window.location.reload();
+            }}
         >
             <div className="w-full h-0 pb-[75%] relative productCard">
                 <img

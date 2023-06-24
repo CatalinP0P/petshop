@@ -11,6 +11,7 @@ export default function LoginForm({ className, closeTabs }) {
     const [error, setError] = useState('')
 
     const loginWithEmail = async () => {
+        console.log("Logging in")
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)

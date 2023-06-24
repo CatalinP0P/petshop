@@ -1,9 +1,9 @@
 import React from "react";
 
-import truckFast from "../../assets/truck-fast.svg";
-import truck from "../../assets/truck-field.svg";
-import phone from "../../assets/phone-volume.svg";
-import arrowsRotate from "../../assets/arrows-rotate.svg";
+import truckFast from "../assets/truck-fast.svg";
+import truck from "../assets/truck-field.svg"
+import phone from "../assets/phone-volume.svg";
+import arrowsRotate from "../assets/arrows-rotate.svg";
 
 export default function Info({ className }) {
   return (

@@ -56,6 +56,11 @@ export const DatabaseProvider = ({ children }) => {
             })
     }
 
+    const getProduct = async (productID) => {
+        const response = await req.get("products/" + productID)
+        return response.data
+    }
+
     const pingServer = async () => {
         axios.get('/').then((response) => {
             console.log('Backend responded')
@@ -81,7 +86,8 @@ export const DatabaseProvider = ({ children }) => {
                 setIdToken: setIdToken,
                 fetchProducts: fetchProducts,
                 postProduct: postProduct,
-                searchProducts: searchProducts
+                searchProducts: searchProducts,
+                getProduct: getProduct
             }}
         >
             {children}

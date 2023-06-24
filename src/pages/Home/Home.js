@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import SlideShow from './SlideShow'
-import Info from './Info'
+import Info from '../../components/Info'
 import MobileCategories from './MobileCategories'
 import { useAuth } from '../../context/authContext'
 import hrana from '../../assets/hrana.png'
@@ -9,6 +9,7 @@ import Container from '../../components/Container'
 import About from './About'
 import { useDatabaseContext } from '../../context/databaseContext'
 import firebase from '../../lib/firebase.js'
+import Title from '../../components/Title'
 
 const BestSellers = [
     {
@@ -41,9 +42,7 @@ export default function Home() {
             <Info />
             <MobileCategories className={'py-6'} />
             <Container className={'pt-16 px-2'}>
-                <label className="text-4xl font-bold uppercase">
-                    Best Sellers
-                </label>
+                <Title>Best Sellers</Title>
                 <ProductsContainer
                     className={'pt-2'}
                     products={db.bestSellers}
@@ -51,9 +50,7 @@ export default function Home() {
             </Container>
 
             <Container className={'pt-16 px-2'}>
-                <label className="text-4xl font-bold uppercase">
-                    Recently Visited
-                </label>
+                <Title>Recently Visited</Title>
                 <ProductsContainer className={'pt-2'} products={BestSellers} />
             </Container>
 
