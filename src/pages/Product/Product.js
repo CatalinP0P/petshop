@@ -7,10 +7,12 @@ import ProductsContainer from '../../components/ProductsContainer'
 import PrimaryButton from '../../components/PrimaryButton'
 import Info from '../../components/Info'
 import Title from '../../components/Title'
+import { useCart } from '../../context/cartContext'
 
 export default function Product() {
     const { id } = useParams()
     const db = useDatabaseContext()
+    const cart = useCart()
 
     const [product, setProduct] = useState()
     const [similarProducts, setSimilarProducts] = useState([])
@@ -69,7 +71,12 @@ export default function Product() {
                             />
                         </div>
                         <div className="lg:w-full" />
-                        <PrimaryButton className={'w-full h-fit py-[10px]'}>
+                        <PrimaryButton
+                            className={'w-full h-fit py-[10px]'}
+                            onClick={async () => {
+                                await cart.addToCart(product._id)
+                            }}
+                        >
                             Add to Cart
                         </PrimaryButton>
                     </div>
@@ -86,5 +93,7 @@ export default function Product() {
                 ></ProductsContainer>
             </Container>
         </>
-    ) : <label>Loading product...</label>
+    ) : (
+        <label>Loading product...</label>
+    )
 }

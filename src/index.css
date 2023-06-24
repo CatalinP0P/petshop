@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .productCard div {
-  display: none;
+    display: none;
 }
 
 .productCard:hover div {
-  display: flex;
+    display: flex;
 }

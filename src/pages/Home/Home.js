@@ -10,6 +10,7 @@ import About from './About'
 import { useDatabaseContext } from '../../context/databaseContext'
 import firebase from '../../lib/firebase.js'
 import Title from '../../components/Title'
+import { useCart } from '../../context/cartContext'
 
 const BestSellers = [
     {
@@ -31,6 +32,7 @@ const BestSellers = [
 export default function Home() {
     const auth = useAuth()
     const db = useDatabaseContext()
+    const cartContext = useCart();
 
     useEffect(() => {
         db.fetchProducts()
@@ -50,6 +52,7 @@ export default function Home() {
             </Container>
 
             <Container className={'pt-16 px-2'}>
+                <button onClick={() => cartContext.clearCart()}>clear cart</button>
                 <Title>Recently Visited</Title>
                 <ProductsContainer className={'pt-2'} products={BestSellers} />
             </Container>

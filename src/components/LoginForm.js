@@ -16,7 +16,7 @@ export default function LoginForm({ className, closeTabs }) {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then((response) => {
-                console.log(response)
+                window.location.reload();
             })
             .catch((err) => {
                 setError(err.message.split('.')[0].split(':')[1])

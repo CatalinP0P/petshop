@@ -1,19 +1,22 @@
 import React from 'react'
 import cart from '../assets/cart-white.svg'
 import { useNavigate } from 'react-router-dom'
+import { useCart } from '../context/cartContext'
 
 export default function ProductCard({ product, onClick }) {
     const navigate = useNavigate()
+    const cartContext = useCart()
 
-    const addToCart = () => {
-        console.log('Still working on it')
+    const addToCart = async (id) => {
+        const response = await cartContext.addToCart(id)
     }
+
     return (
         <div
             className="border-2 border-gray-100  rounded-md px-[24px] py-[32px] flex flex-col gap-4 h-full cursor-pointer hover:border-orange-600"
             onClick={() => {
                 navigate('/product/' + product._id)
-                window.location.reload();
+                window.location.reload()
             }}
         >
             <div className="w-full h-0 pb-[75%] relative productCard">
@@ -22,10 +25,16 @@ export default function ProductCard({ product, onClick }) {
                     src={product.imageURL}
                 />
                 <div
+                    id="addToCart"
                     className="flex absolute left-[50%] top-[50%] translate-x-[-50%] w-full translate-y-[-50%] items-center justify-between gap-1 text-white cursor-pointer "
                     onClick={(e) => {
-                        e.stopPropagation()
-                        addToCart(product.id)
+                        const isMobile = /iPhone|iPad|iPod|Android/i.test(
+                            window.navigator.userAgent
+                        )
+                        if (!isMobile) {
+                            addToCart(product._id)
+                            e.stopPropagation()
+                        }
                     }}
                 >
                     <img

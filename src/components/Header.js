@@ -1,19 +1,23 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import LoginForm from '../components/LoginForm'
+import { useCart } from '../context/cartContext'
 import { useAuth } from '../context/authContext'
 import { Link } from 'react-router-dom'
+import PrimaryButton from '../components/PrimaryButton'
 
 import Logo from '../components/Logo'
 import Cart from '../assets/cart.svg'
 import User from '../assets/user.svg'
 import firebase from '../lib/firebase'
 import { useNavigate } from 'react-router-dom'
+import CartProduct from './CartProduct'
 
 const categories = ['dog', 'cat', 'fish', 'bird', 'tarantula', 'rodent']
 
 export default function Header() {
     const auth = useAuth()
     const navigate = useNavigate()
+    const cartContext = useCart()
 
     const [myAccountTab, setMyAccountTab] = useState(false)
     const [myCartTab, setMyCartTab] = useState(false)
@@ -71,14 +75,16 @@ export default function Header() {
                             src={User}
                             className="w-[24px] h-[24px] md:w-[40px] md:h-[40px]"
                         />
-                        <div className="hidden md:flex flex-col justify-between relative">
-                            <label className="text-gray-400">Welcome</label>
-                            <label className="whitespace-nowrap uppercase font-extrabold text-orange-600">
+                        <div className="flex-col justify-between md:relative">
+                            <label className="text-gray-400 hidden md:flex">
+                                Welcome
+                            </label>
+                            <label className="hidden md:flex whitespace-nowrap uppercase font-extrabold text-orange-600">
                                 My account
                             </label>
                             <div
                                 className={
-                                    'absolute right-0 w-fit z-40 shadow-md bg-white top-[65px] flex-col gap-4 ' +
+                                    'absolute right-4 md:right-0 left-4 md:left-auto z-40 shadow-md bg-white top-[50px] md:top-[65px] flex-col gap-4 ' +
                                     (myAccountTab ? ' flex' : ' hidden')
                                 }
                                 onClick={(e) => e.stopPropagation()}
@@ -98,9 +104,10 @@ export default function Header() {
                                         </label>
                                         <label
                                             className="hover:bg-gray-100 px-8 py-2 cursor-pointer"
-                                            onClick={() =>
+                                            onClick={() => {
                                                 firebase.auth().signOut()
-                                            }
+                                                window.location.reload()
+                                            }}
                                         >
                                             Logout
                                         </label>
@@ -131,22 +138,59 @@ export default function Header() {
                             }}
                             className="h-[24px] md:w-[40px] md:h-[40px]"
                         />
-                        <div className="hidden md:flex flex-col justify-between relative">
-                            <label className="text-gray-400 whitespace-nowrap">
-                                1 Product
+                        <div className="md:hidden bg-primary text-white w-[20px] h-[20px] rounded-full absolute right-[15px] top-[10px] flex flex-row justify-center items-center ">
+                            <label>{cartContext.cart.length}</label>
+                        </div>
+                        <div className="flex flex-col justify-between md:relative">
+                            <label className="text-gray-400 whitespace-nowrap hidden md:flex">
+                                {cartContext.cart.length}{' '}
+                                {cartContext.cart.length
+                                    ? 'Products'
+                                    : 'Product'}
                             </label>
-                            <label className="whitespace-nowrap uppercase font-extrabold text-orange-600">
+                            <label className="hidden md:flex whitespace-nowrap uppercase font-extrabold text-orange-600">
                                 Cart
                             </label>
                             <div
                                 className={
-                                    'absolute right-0 w-fit px-8 py-4 z-40 shadow-md bg-white top-[65px] flex-col gap-4 ' +
+                                    'absolute md:min-w-[400px] right-4 md:right-0 left-4 md:left-auto px-8 py-4 z-40 shadow-md bg-white top-[50px] md:top-[65px] flex-col gap-4 ' +
                                     (myCartTab ? ' flex' : ' hidden')
                                 }
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <label className="text-sm text-gray-600 whitespace-nowrap">
-                                    No products in Cart
+                                    {cartContext.cart.length ? (
+                                        <>
+                                            {cartContext.cart.map((prodId) => {
+                                                return (
+                                                    <div
+                                                        key={
+                                                            Math.random() * 1000
+                                                        }
+                                                        className="w-full flex flex-col gap-4"
+                                                    >
+                                                        <CartProduct
+                                                            productId={prodId}
+                                                        />
+                                                    </div>
+                                                )
+                                            })}
+                                            <div
+                                                className="flex flex-row w-full justify-between items-center py-4"
+                                                onClick={() => {
+                                                    alert('Still working on it')
+                                                }}
+                                            >
+                                                <PrimaryButton
+                                                    className={'w-full py-4'}
+                                                >
+                                                    Go to Cart
+                                                </PrimaryButton>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <h1> No products in Cart</h1>
+                                    )}
                                 </label>
                             </div>
                         </div>

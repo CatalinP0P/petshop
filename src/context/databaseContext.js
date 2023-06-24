@@ -57,7 +57,7 @@ export const DatabaseProvider = ({ children }) => {
     }
 
     const getProduct = async (productID) => {
-        const response = await req.get("products/" + productID)
+        const response = await req.get('products/' + productID)
         return response.data
     }
 
@@ -69,8 +69,23 @@ export const DatabaseProvider = ({ children }) => {
     }
 
     const searchProducts = async (filters) => {
-        const response = await req.post('/products/search', {filters: filters})
+        const response = await req.post('/products/search', {
+            filters: filters,
+        })
         return response.data
+    }
+
+    const getCart = async () => {
+        if (!hasToken) return
+        
+        const cart = await req.get('/cart')
+        return cart
+    }
+
+    const updateCart = async (products) => {
+        const response = await req.post('/cart', { products: products })
+        console.log(response)
+        return response
     }
 
     useEffect(() => {
@@ -87,7 +102,10 @@ export const DatabaseProvider = ({ children }) => {
                 fetchProducts: fetchProducts,
                 postProduct: postProduct,
                 searchProducts: searchProducts,
-                getProduct: getProduct
+                getProduct: getProduct,
+
+                getCart: getCart,
+                updateCart: updateCart
             }}
         >
             {children}
