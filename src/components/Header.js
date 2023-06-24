@@ -61,7 +61,14 @@ export default function Header() {
                             567 890
                         </a>
                     </div>
-                    <div />
+                    <div className="text-gray-600 text-xs font-light normal-case">
+                        <label>
+                            Test Account:{' '}
+                            <label className="me-4">
+                                Email: test@gmail.com Password: test123
+                            </label>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -169,7 +176,7 @@ export default function Header() {
                             </label>
                             <div
                                 className={
-                                    'absolute md:min-w-[400px] right-4 md:right-0 left-4 md:left-auto px-8 py-4 z-40 shadow-md bg-white top-[50px] md:top-[65px] flex-col gap-4 ' +
+                                    'absolute md:min-w-[400px] right-4 md:right-0 left-4 md:left-auto pt-4 z-40 shadow-md bg-white top-[50px] md:top-[65px] flex-col gap-4 ' +
                                     (myCartTab ? ' flex' : ' hidden')
                                 }
                                 onClick={(e) => e.stopPropagation()}
@@ -197,8 +204,10 @@ export default function Header() {
                                                     alert('Still working on it')
                                                 }}
                                             >
-                                                <div className="flex flex-row justify-between items-center w-full pb-4 text-xl">
-                                                    <label className='text-gray-400' >Total : </label>
+                                                <div className="flex flex-row px-4 justify-between items-center w-full pb-4 text-xl">
+                                                    <label className="text-gray-400">
+                                                        Total :{' '}
+                                                    </label>
                                                     <label>
                                                         {(() => {
                                                             var total = 0
@@ -210,15 +219,22 @@ export default function Header() {
                                                                         )
                                                                 }
                                                             )
-                                                            return total
-                                                        })()}€
+                                                            return total.toFixed(
+                                                                2
+                                                            )
+                                                        })()}
+                                                        €
                                                     </label>
                                                 </div>
-                                                <PrimaryButton
-                                                    className={'w-full py-4'}
-                                                >
-                                                    Go to Cart
-                                                </PrimaryButton>
+                                                <div className="w-full px-4">
+                                                    <PrimaryButton
+                                                        className={
+                                                            'w-full py-4'
+                                                        }
+                                                    >
+                                                        Go to Cart
+                                                    </PrimaryButton>
+                                                </div>
                                             </div>
                                         </>
                                     ) : (

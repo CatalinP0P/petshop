@@ -9,7 +9,7 @@ export default function CartProduct({ className, product }) {
 
     return product ? (
         <div
-            className="border-b border-gray-400 flex flex-row py-2 gap-2 justify-between"
+            className="border-b border-gray-400 flex flex-row pt-2 pb-4 gap-2 justify-between px-8"
             onClick={() => {
                 navigate('/product/' + product._id)
                 window.location.reload()
