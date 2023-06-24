@@ -3,26 +3,15 @@ import { useDatabaseContext } from '../context/databaseContext'
 import Paragraph from '../components/Paragraph'
 import { useNavigate } from 'react-router-dom'
 
-export default function CartProduct({ className, productId }) {
+export default function CartProduct({ className, product }) {
     const db = useDatabaseContext()
     const navigate = useNavigate()
-
-    const [product, setProduct] = useState()
-
-    const fetchProduct = async () => {
-        const prod = await db.getProduct(productId)
-        setProduct(prod)
-    }
-
-    useEffect(() => {
-        fetchProduct()
-    }, [])
 
     return product ? (
         <div
             className="border-b border-gray-400 flex flex-row py-2 gap-2 justify-between"
             onClick={() => {
-                navigate('/product/' + productId)
+                navigate('/product/' + product._id)
                 window.location.reload()
             }}
         >

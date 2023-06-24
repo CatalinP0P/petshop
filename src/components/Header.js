@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import LoginForm from '../components/LoginForm'
 import { useCart } from '../context/cartContext'
 import { useAuth } from '../context/authContext'
@@ -11,6 +11,7 @@ import User from '../assets/user.svg'
 import firebase from '../lib/firebase'
 import { useNavigate } from 'react-router-dom'
 import CartProduct from './CartProduct'
+import { useDatabaseContext } from '../context/databaseContext'
 
 const categories = ['dog', 'cat', 'fish', 'bird', 'tarantula', 'rodent']
 
@@ -18,15 +19,30 @@ export default function Header() {
     const auth = useAuth()
     const navigate = useNavigate()
     const cartContext = useCart()
+    const db = useDatabaseContext()
 
     const [myAccountTab, setMyAccountTab] = useState(false)
     const [myCartTab, setMyCartTab] = useState(false)
     const [search, setSearch] = useState('')
 
+    const [cart, setCart] = useState([])
+
     const closeAllTabs = () => {
         setMyAccountTab(false)
         setMyCartTab(false)
     }
+
+    const fetchCardProducts = async () => {
+        setCart([])
+        cartContext.cart.forEach(async (productId) => {
+            const newProd = await db.getProduct(productId)
+            setCart((old) => [...old, newProd])
+        })
+    }
+
+    useEffect(() => {
+        fetchCardProducts()
+    }, [cartContext.cart])
 
     const searchProduct = () => {
         navigate('/search?q=' + search)
@@ -161,7 +177,7 @@ export default function Header() {
                                 <label className="text-sm text-gray-600 whitespace-nowrap">
                                     {cartContext.cart.length ? (
                                         <>
-                                            {cartContext.cart.map((prodId) => {
+                                            {cart.map((product) => {
                                                 return (
                                                     <div
                                                         key={
@@ -170,17 +186,34 @@ export default function Header() {
                                                         className="w-full flex flex-col gap-4"
                                                     >
                                                         <CartProduct
-                                                            productId={prodId}
+                                                            product={product}
                                                         />
                                                     </div>
                                                 )
                                             })}
                                             <div
-                                                className="flex flex-row w-full justify-between items-center py-4"
+                                                className="flex flex-col w-full justify-between items-center py-4"
                                                 onClick={() => {
                                                     alert('Still working on it')
                                                 }}
                                             >
+                                                <div className="flex flex-row justify-between items-center w-full pb-4 text-xl">
+                                                    <label className='text-gray-400' >Total : </label>
+                                                    <label>
+                                                        {(() => {
+                                                            var total = 0
+                                                            cart.forEach(
+                                                                (product) => {
+                                                                    total +=
+                                                                        parseFloat(
+                                                                            product.price
+                                                                        )
+                                                                }
+                                                            )
+                                                            return total
+                                                        })()}€
+                                                    </label>
+                                                </div>
                                                 <PrimaryButton
                                                     className={'w-full py-4'}
                                                 >
