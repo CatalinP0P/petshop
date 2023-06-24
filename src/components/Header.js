@@ -33,11 +33,13 @@ export default function Header() {
     }
 
     const fetchCardProducts = async () => {
-        setCart([])
+        var newProducts = [];
         cartContext.cart.forEach(async (productId) => {
             const newProd = await db.getProduct(productId)
-            setCart((old) => [...old, newProd])
+            newProducts.push(newProd)
         })
+        console.log(newProducts)
+        setCart(newProducts);
     }
 
     useEffect(() => {
@@ -201,7 +203,8 @@ export default function Header() {
                                             <div
                                                 className="flex flex-col w-full justify-between items-center py-4"
                                                 onClick={() => {
-                                                    alert('Still working on it')
+                                                    navigate("/cart")
+                                                    window.location.reload();
                                                 }}
                                             >
                                                 <div className="flex flex-row px-4 justify-between items-center w-full pb-4 text-xl">
