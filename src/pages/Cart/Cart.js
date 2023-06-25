@@ -23,10 +23,14 @@ export default function Cart() {
 
     const [adress, setAdress] = useState('')
     const [postalCode, setPostalCode] = useState('')
-    const [email, setEmail] = useState(auth.currentUser?.email)
+    const [email, setEmail] = useState(
+        auth.currentUser?.email ? auth.currentUser.email : ''
+    )
     const [details, setDetails] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
-    const [fullName, setFullName] = useState(auth.currentUser?.displayName)
+    const [fullName, setFullName] = useState(
+        auth.currentUser?.displayName ? auth.currentUser.displayName : ''
+    )
 
     const cityRef = useRef()
     const countyRef = useRef()
@@ -93,7 +97,6 @@ export default function Cart() {
                 zip: '1234 AB',
                 city: 'Sampletown',
                 country: 'Samplecountry',
-                //"custom1": "custom value 1",
             },
             client: {
                 address: order.adress.street,

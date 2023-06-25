@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SlideShow from './SlideShow'
 import Info from '../../components/Info'
 import MobileCategories from './MobileCategories'
@@ -11,31 +11,31 @@ import { useDatabaseContext } from '../../context/databaseContext'
 import firebase from '../../lib/firebase.js'
 import Title from '../../components/Title'
 import { useCart } from '../../context/cartContext'
-
-const BestSellers = [
-    {
-        id: 1,
-        imageURL: hrana,
-        title: 'N&D GRAIN FREE ADULT MINI MIEL, AFINE SI DOVLEAC, 2.5 KG',
-        category: 'dogs',
-        price: 29.33,
-    },
-    {
-        id: 1,
-        imageURL: hrana,
-        title: 'N&D GRAIN FREE ADULT MINI MIEL, AFINE SI DOVLEAC, 2.5 KG',
-        category: 'dogs',
-        price: 29.33,
-    },
-]
+import { json, useSearchParams } from 'react-router-dom'
 
 export default function Home() {
     const auth = useAuth()
     const db = useDatabaseContext()
-    const cartContext = useCart();
+    const cartContext = useCart()
+
+    const [RecentlyVisited, setRecentlyVisited] = useState([])
+
+    const fetchRecenltyVisited = async () => {
+        setRecentlyVisited([])
+        var ids = localStorage.getItem('recentlyVisited')
+        ids = JSON.parse(ids)
+
+        var array = []
+        for (var i = 0; i < ids.length; i++) {
+            const product = await db.getProduct(ids[i])
+            array.push(product)
+        }
+        setRecentlyVisited(array)
+    }
 
     useEffect(() => {
         db.fetchProducts()
+        fetchRecenltyVisited()
     }, [])
 
     return (
@@ -52,9 +52,11 @@ export default function Home() {
             </Container>
 
             <Container className={'pt-16 px-2'}>
-                <button onClick={() => cartContext.clearCart()}>clear cart</button>
                 <Title>Recently Visited</Title>
-                <ProductsContainer className={'pt-2'} products={BestSellers} />
+                <ProductsContainer
+                    className={'pt-2'}
+                    products={RecentlyVisited}
+                />
             </Container>
 
             <Container className={'pt-16 pb-64 px-2'}>

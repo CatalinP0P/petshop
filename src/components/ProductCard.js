@@ -11,10 +11,30 @@ export default function ProductCard({ product, onClick }) {
         const response = await cartContext.addToCart(id)
     }
 
+    const addToLocalStorage = (id) => {
+        var recenltyVisitedIds = localStorage.getItem('recentlyVisited')
+
+        if (recenltyVisitedIds) {
+            recenltyVisitedIds = JSON.parse(recenltyVisitedIds)
+            if (recenltyVisitedIds.indexOf(id) == -1)
+                recenltyVisitedIds.push(id)
+            if ( recenltyVisitedIds.length > 5 )
+                recenltyVisitedIds.shift();
+        } else {
+            recenltyVisitedIds = [id]
+        }
+
+        localStorage.setItem(
+            'recentlyVisited',
+            JSON.stringify(recenltyVisitedIds)
+        )
+    }
+
     return (
         <div
             className="border-2 border-gray-100  rounded-md px-[24px] py-[32px] flex flex-col gap-4 h-full cursor-pointer hover:border-orange-600"
             onClick={() => {
+                addToLocalStorage(product._id)
                 navigate('/product/' + product._id)
                 window.location.reload()
             }}
