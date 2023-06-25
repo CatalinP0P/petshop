@@ -9,3 +9,17 @@
 .productCard:hover div {
     display: flex;
 }
+
+#pdf {
+    text-align: center;
+    position: relative;
+}
+
+#pdf canvas {
+    position: absolute;
+    object-fit: contain;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}

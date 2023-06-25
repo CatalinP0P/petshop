@@ -77,13 +77,27 @@ export const DatabaseProvider = ({ children }) => {
 
     const getCart = async () => {
         if (!hasToken) return
-        
+
         const cart = await req.get('/cart')
         return cart
     }
 
     const updateCart = async (products) => {
         const response = await req.post('/cart', { products: products })
+        return response.data
+    }
+
+    const sendOrder = async (userId, products, adress) => {
+        const response = await req.post('/orders', {
+            adress: adress,
+            userId: userId,
+            products: products,
+        })
+        return response.data
+    }
+
+    const getOrder = async (orderId) => {
+        const response = await req.get('/orders/' + orderId)
         return response.data
     }
 
@@ -104,7 +118,10 @@ export const DatabaseProvider = ({ children }) => {
                 getProduct: getProduct,
 
                 getCart: getCart,
-                updateCart: updateCart
+                updateCart: updateCart,
+
+                sendOrder: sendOrder,
+                getOrder: getOrder,
             }}
         >
             {children}

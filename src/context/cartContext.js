@@ -19,34 +19,26 @@ export const CartProvider = ({ children }) => {
     }
 
     const getCart = async () => {
-        console.log('Getting products')
         if (auth.currentUser) {
             const token = await auth.currentUser.getIdToken()
             db.setIdToken(token)
             const cart = await db.getCart()
-            console.log(cart.data.products)
             setCart(cart.data.products)
         } else {
-            console.log(
-                'Getting the cart from local storage because no user is logged'
-            )
             const localStorageCart = localStorage.getItem('cart')
             if (!localStorageCart) {
                 localStorage.setItem('cart', [])
                 setCart([])
             } else {
-                console.log(JSON.parse(localStorageCart))
                 setCart(JSON.parse(localStorageCart))
             }
         }
         if (!loaded) {
             setLoaded(true)
-            console.log('Loaded')
         }
     }
 
     const updateCart = async (products) => {
-        console.log('updating products')
         if (auth.currentUser) {
             db.updateCart(products)
         } else {
@@ -74,6 +66,14 @@ export const CartProvider = ({ children }) => {
         updateCart(currentCart)
     }
 
+    const sendOrder = async (adress) => {
+        const userId = auth.currentUser ? auth.currentUser?.uid : null
+        const orderId = await db.sendOrder(userId, cart, adress)
+        console.log(orderId)
+        clearCart()
+        return orderId
+    }
+
     return (
         <CartContext.Provider
             value={{
@@ -82,6 +82,8 @@ export const CartProvider = ({ children }) => {
                 clearCart: clearCart,
                 removeFromCart: removeFromCart,
                 loaded: loaded,
+
+                sendOrder: sendOrder,
             }}
         >
             {children}
