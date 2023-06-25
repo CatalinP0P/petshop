@@ -101,6 +101,11 @@ export const DatabaseProvider = ({ children }) => {
         return response.data
     }
 
+    const getMyOrders = async () => {
+        const response = await req.get('/orders')
+        return response.data
+    }
+
     useEffect(() => {
         pingServer()
     }, [])
@@ -122,6 +127,7 @@ export const DatabaseProvider = ({ children }) => {
 
                 sendOrder: sendOrder,
                 getOrder: getOrder,
+                getMyOrders: getMyOrders,
             }}
         >
             {children}

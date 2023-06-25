@@ -14,6 +14,7 @@ import Register from './pages/Register/Register'
 import NewProduct from './pages/NewProduct/NewProduct'
 import Product from './pages/Product/Product'
 import Cart from './pages/Cart/Cart'
+import MyOrders from './pages/MyOrders/MyOrders'
 
 export default function App() {
     const db = useDatabaseContext()
@@ -33,6 +34,7 @@ export default function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/product/:id" element={<Product />} />
+                <Route path="/myorders" element={<MyOrders />} />
                 <Route path="/new/product" element={<NewProduct />} />
                 <Route
                     path="*"

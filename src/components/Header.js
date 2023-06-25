@@ -33,13 +33,12 @@ export default function Header() {
     }
 
     const fetchCardProducts = async () => {
-        var newProducts = [];
+        var newProducts = []
         cartContext.cart.forEach(async (productId) => {
             const newProd = await db.getProduct(productId)
             newProducts.push(newProd)
         })
-        console.log(newProducts)
-        setCart(newProducts);
+        setCart(newProducts)
     }
 
     useEffect(() => {
@@ -116,16 +115,20 @@ export default function Header() {
                             >
                                 {auth.currentUser ? (
                                     <div className="flex flex-col w-full whitespace-nowrap">
-                                        <label
-                                            className="px-8 py-2"
-                                            onClick={() =>
-                                                console.log(auth.currentUser)
-                                            }
-                                        >
+                                        <label className="px-8 py-2">
                                             Hi,
                                             <span className="font-bold py-4">
                                                 {` ${auth.currentUser.email}`}
                                             </span>
+                                        </label>
+                                        <label
+                                            className="px-8 py-2 cursor-pointer hover:bg-gray-100"
+                                            onClick={() => {
+                                                navigate('/myorders')
+                                                window.location.reload()
+                                            }}
+                                        >
+                                            My Orders
                                         </label>
                                         <label
                                             className="hover:bg-gray-100 px-8 py-2 cursor-pointer"
@@ -203,8 +206,8 @@ export default function Header() {
                                             <div
                                                 className="flex flex-col w-full justify-between items-center py-4"
                                                 onClick={() => {
-                                                    navigate("/cart")
-                                                    window.location.reload();
+                                                    navigate('/cart')
+                                                    window.location.reload()
                                                 }}
                                             >
                                                 <div className="flex flex-row px-4 justify-between items-center w-full pb-4 text-xl">
@@ -241,7 +244,9 @@ export default function Header() {
                                             </div>
                                         </>
                                     ) : (
-                                        <h1> No products in Cart</h1>
+                                        <h1 className="p-4 font-bold text-gray-800 uppercase text-lg w-full text-center">
+                                            No products in Cart
+                                        </h1>
                                     )}
                                 </label>
                             </div>
