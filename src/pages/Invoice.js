@@ -12,8 +12,11 @@ export default function Invoice({ invoicePDF }) {
     }
 
     return (
-        <div className='w-full flex flex-col items-center' >
-            <div id="pdf" className="w-full h-[75vh] border border-black"></div>
+        <div className="w-full flex flex-col items-center">
+            <div
+                id="pdf"
+                className="w-full h-[100vw]"
+            ></div>
             <PrimaryButton onClick={() => downloadInvoice()}>
                 Download Invoice
             </PrimaryButton>

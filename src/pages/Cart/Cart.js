@@ -73,6 +73,7 @@ export default function Cart() {
                 quantity: 1,
                 description: prodDb.title,
                 price: prodDb.price,
+                'tax-rate': 0
             })
         }
 
@@ -378,7 +379,7 @@ export default function Cart() {
                     </label>
                     <input
                         value={email}
-                        onChange={(e) => setEmail(email)}
+                        onChange={(e) => setEmail(e.target.value)}
                         type="email"
                         className="p-2 border border-gray-300 rounded-md w-full"
                     />
